@@ -26,9 +26,9 @@ class MSNetService {
   }
 
   /// 附件上传
-  upLoad (List files, String url, {Object params,}) async{
+  upLoad (var file, String fileName, String url, {Object params,}) async{
     return await request(url,
-        method: Method.UPLOAD,params: params, files: files);
+        method: Method.UPLOAD,params: params, file: file, fileName: fileName);
   }
 
   /// 附件下载
@@ -38,7 +38,7 @@ class MSNetService {
 
   ///  请求部分
   request(String url,
-      {Method method, Object params, List files, String fileSavePath}) async {
+      {Method method, Object params, var file, String fileName, String fileSavePath}) async {
     try {
       Response response;
 
@@ -59,13 +59,12 @@ class MSNetService {
           break;
         case Method.UPLOAD:
           {
-            List uploadFiles = List();
-            for (int i=0; i<files.length; i++)  {
-              uploadFiles.add(new UploadFileInfo.fromBytes(files[i], '${i}.png'));
-              FormData formData = new FormData.from(params);
-              formData.add("files", uploadFiles);
-              response = await sessionManager.post(url,data: formData);
+            FormData formData = new FormData();
+            if (params != null) {
+              formData = FormData.from(params);
             }
+            formData.add("files", UploadFileInfo.fromBytes(file, fileName+'.png'));
+            response = await sessionManager.post(url,data: formData);
             break;
           }
         case Method.DOWNLOAD:

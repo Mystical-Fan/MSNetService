@@ -2,7 +2,6 @@
 library basicnetservice;
 export 'package:msnetservice/NetService/MSNetService.dart';
 import 'package:msnetservice/NetService/MSNetService.dart';
-import 'dart:convert';
 
 
 class BasicNetService extends MSNetService {
@@ -11,13 +10,13 @@ class BasicNetService extends MSNetService {
   Method method;
 
   @override
-  request(String url, {Method method, Object params, List files, String fileSavePath}) {
+  request(String url, {Method method, Object params, var file, String fileName,String fileSavePath}) {
     // TODO: implement request
     this.url = url;
     this.method = method;
     /// 传参进行统一处理
     Map newParams = {};
-    return super.request(url,method: method, params: newParams, files: files, fileSavePath: fileSavePath);
+    return super.request(url,method: method, params: newParams, file: file, fileName: fileName,fileSavePath: fileSavePath);
   }
 
   @override
